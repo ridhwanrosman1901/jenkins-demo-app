@@ -1,41 +1,30 @@
 pipeline {
     agent any
-
     stages {
         stage('Checkout') {
             steps {
                 checkout scm
             }
         }
-        
         stage('Install Dependencies') {
             steps {
-                sh 'npm install'
+                bat 'npm install'
             }
         }
-
         stage('Build') {
             steps {
-                sh 'npm run build'
+                bat 'npm run build'
             }
         }
-
         stage('Test') {
             steps {
-                sh 'npm test -- --watchAll=false'
+                bat 'npm test'
             }
         }
-
         stage('Archive Artifacts') {
             steps {
-                archiveArtifacts artifacts: 'build/**', allowEmptyArchive: true
+                archiveArtifacts artifacts: '**/target/*.jar', allowEmptyArchive: true
             }
-        }
-    }
-
-    post {
-        always {
-            cleanWs()
         }
     }
 }
